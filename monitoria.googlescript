@@ -1,0 +1,35 @@
+var keyMonitor = "<chave do servidor monitor>";
+var botSecret= "<token do bot telegram>";
+var chatId=<chat id do bot>;
+var server="http://example.com/";
+
+function monitorar(){
+ 
+  try {
+    var response = UrlFetchApp.fetch(server+"?keyMonitor="+key);
+    if (response.getResponseCode()==200) {
+      var p = JSON.parse(response.getContentText());
+      
+      if (p.indexOf('terminal64.exe')==-1){
+        sendTelegramNotification("Trade fora do ar. veja o servidor");
+      }
+    } else if (response.getResponseCode()==400) {
+      sendTelegramNotification("Erro de chave da api.");
+    } else if (response.getResponseCode()==400) {
+      sendTelegramNotification("Erro no sistema de monitoria, parece não estar funcionando corretamente, verifique o log do servidor.");
+    }
+    
+  }  catch (error){
+    sendTelegramNotification("Serviço de monitoria fora do ar.");
+  }
+  
+}
+
+
+
+function sendTelegramNotification(body) {
+  var response = UrlFetchApp.fetch("https://api.telegram.org/bot" + botSecret + "/sendMessage?text=" + encodeURIComponent(body) + "&chat_id=" + chatId + "&parse_mode=HTML");
+}
+
+  
+  
