@@ -37,10 +37,11 @@ public class Application {
 				String[] parts = line.split(",");
 				String unq = parts[0].substring(1).replaceFirst(".$", "");
 				String pid = parts[1].substring(1).replaceFirst(".$", "");
-				result.append(unq);
+				result.append("\"").append(unq).append("\",");
 				// System.out.println(unq + " " + pid);
 			}
 			sc.close();
+			result.append("\"\"");
 			result.append("]");
 			process.waitFor();
 			return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
